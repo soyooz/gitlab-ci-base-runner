@@ -1,7 +1,7 @@
 FROM docker
 
 # make deps
-RUN apk add --no-cache py-pip git curl make gcc python g++
+RUN apk add --no-cache py-pip git curl make gcc python g++ tar
 RUN apk add vips-dev fftw-dev --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
 RUN pip install docker-compose
 
@@ -14,14 +14,9 @@ RUN addgroup -g 1000 node \
         libstdc++ \
     && apk add --no-cache --virtual .build-deps \
         binutils-gold \
-        curl \
-        g++ \
-        gcc \
         gnupg \
         libgcc \
         linux-headers \
-        make \
-        python \
   # gpg keys listed at https://github.com/nodejs/node#release-team
   && for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
@@ -51,23 +46,3 @@ RUN addgroup -g 1000 node \
     && cd .. \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
-
-ENV YARN_VERSION 1.6.0
-
-RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
-  && for key in \
-    6A010C5166006599AA17F08146C2130DFD2497F5 \
-  ; do \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-    gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
-  done \
-  && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
-  && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
-  && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && mkdir -p /opt \
-  && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
-  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
-  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
-  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-&& apk del .build-deps-yarn

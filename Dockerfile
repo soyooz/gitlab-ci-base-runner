@@ -2,11 +2,11 @@ FROM docker
 
 # make deps
 RUN apk add --no-cache py-pip git curl make gcc python g++
-RUN apk add vips-dev fftw-dev --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN apk add fftw-dev --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
 RUN pip install docker-compose
 
 # Node deps
-ENV NODE_VERSION 8.11.3
+ENV NODE_VERSION 8.12.0
 
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
@@ -52,7 +52,7 @@ RUN addgroup -g 1000 node \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
 
-ENV YARN_VERSION 1.6.0
+ENV YARN_VERSION 1.12.3
 
 RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && for key in \

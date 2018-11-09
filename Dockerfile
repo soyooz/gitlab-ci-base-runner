@@ -6,7 +6,7 @@ RUN apk add fftw-dev --no-cache --repository https://dl-3.alpinelinux.org/alpine
 RUN pip install docker-compose
 
 # Node deps
-ENV NODE_VERSION 8.12.0
+ENV NODE_VERSION 10.13.0
 
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \

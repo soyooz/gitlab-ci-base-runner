@@ -7,7 +7,7 @@ RUN apk add --no-cache --virtual .docker-compose-deps python-dev openssl-dev \
     && apk del .docker-compose-deps
 
 # Node deps
-ENV NODE_VERSION 12.8.0
+ENV NODE_VERSION 12.13.0
 
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
@@ -23,7 +23,7 @@ RUN addgroup -g 1000 node \
         linux-headers \
         make \
         python \
-  # gpg keys listed at https://github.com/nodejs/node#release-team
+  # gpg keys listed at https://github.com/nodejs/node#release-keys
   && for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
@@ -55,11 +55,7 @@ RUN addgroup -g 1000 node \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
 
-<<<<<<< HEAD
-ENV YARN_VERSION 1.12.3
-=======
-ENV YARN_VERSION 1.17.3
->>>>>>> Migrate to node 12
+ENV YARN_VERSION 1.19.1
 
 RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && for key in \
